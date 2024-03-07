@@ -80,12 +80,12 @@ class DatabaseSeeder extends Seeder
 //        $this->call(SeederAppMenu::class);
 //        $this->call(SeederAppMenuTranslation::class);
 
-        $this->call(CategorySeeder::class);
-        $this->call(CategoryTranslationSeeder::class);
-        $this->call(ProductSeeder::class);
-        $this->call(ProductTranslationSeeder::class);
-        $this->call(ProductPhotoSeeder::class);
-        $this->call(CategoryProductSeeder::class);
+//        $this->call(CategorySeeder::class);
+//        $this->call(CategoryTranslationSeeder::class);
+//        $this->call(ProductSeeder::class);
+//        $this->call(ProductTranslationSeeder::class);
+//        $this->call(ProductPhotoSeeder::class);
+//        $this->call(CategoryProductSeeder::class);
 
 //        $this->call(FaqCategorySeeder::class);
 //        $this->call(FaqCategoryTranslationSeeder::class);
@@ -94,11 +94,11 @@ class DatabaseSeeder extends Seeder
 //        $this->call(FaqPivotSeeder::class);
 //        $this->call(FaqPhotoSeeder::class);
 //        $this->call(FaqPhotoTranslationSeeder::class);
-//
+
 //        $this->call(BlogCategorySeeder::class);
 //        $this->call(BlogCategoryTranslationSeeder::class);
-//        $this->call(BlogSeeder::class);
-//        $this->call(BlogTranslationSeeder::class);
+        $this->call(BlogSeeder::class);
+        $this->call(BlogTranslationSeeder::class);
 //        $this->call(BlogPivotSeeder::class);
 //        $this->call(BlogPhotoSeeder::class);
 //        $this->call(BlogPhotoTranslationSeeder::class);
