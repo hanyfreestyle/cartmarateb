@@ -9,6 +9,8 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('blog_categories', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('old_id')->nullable();
+            $table->integer('old_parent')->nullable();
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->integer('deep')->default(0);
             $table->string("icon")->nullable();

@@ -95,11 +95,11 @@ class DatabaseSeeder extends Seeder
 //        $this->call(FaqPhotoSeeder::class);
 //        $this->call(FaqPhotoTranslationSeeder::class);
 
-//        $this->call(BlogCategorySeeder::class);
-//        $this->call(BlogCategoryTranslationSeeder::class);
+        $this->call(BlogCategorySeeder::class);
+        $this->call(BlogCategoryTranslationSeeder::class);
         $this->call(BlogSeeder::class);
         $this->call(BlogTranslationSeeder::class);
-//        $this->call(BlogPivotSeeder::class);
+        $this->call(BlogPivotSeeder::class);
 //        $this->call(BlogPhotoSeeder::class);
 //        $this->call(BlogPhotoTranslationSeeder::class);
 

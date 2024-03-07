@@ -150,6 +150,7 @@ class BlogPostController extends AdminMainController {
         try {
             DB::transaction(function () use ($request, $saveData) {
                 $categories = $request->input('categories');
+//                dd($categories);
 
                 $saveData->is_active = intval((bool)$request->input('is_active'));
                 $saveData->youtube = $request->input('youtube');

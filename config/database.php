@@ -66,7 +66,7 @@ return [
         'wordpress' => [ // for WordPress database (used by Corcel)
             'driver'    => 'mysql',
             'host'      => 'localhost',
-            'database'  => 'a_amrateb',
+            'database'  => 'a_cottton',
             'username'  => 'root',
             'password'  => '',
             'charset'   => 'utf8',
