@@ -8,6 +8,8 @@ use App\AppPlugin\BlogPost\Models\BlogCategoryTranslation;
 use App\AppPlugin\BlogPost\Models\BlogTranslation;
 use App\AppPlugin\Product\Models\Brand;
 use App\AppPlugin\Product\Models\BrandTranslation;
+use App\AppPlugin\Product\Models\Category;
+use App\AppPlugin\Product\Models\CategoryTranslation;
 use App\Helpers\AdminHelper;
 use Corcel\Model\Taxonomy;
 use Illuminate\Http\Request;
@@ -16,72 +18,141 @@ use Illuminate\Support\Carbon;
 
 class WordPressController extends Controller {
 
-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-#|||||||||||||||||||||||||||||||||||||| #
+
 public function index(){
-//    $cat = Taxonomy::where('taxonomy', 'yith_product_brand')->with('posts')->take(1)->get();
-    $cats = Taxonomy::where('taxonomy', 'yith_product_brand')->with('meta')->take(1)->get();
-    $saveData = 0 ;
-
-
-    foreach ($cats as $cat){
-        $newBrand = new Brand();
-        $newBrand->old_id = $cat->term_id;
-        $newBrand->product_count = $cat->count;
-        $newBrand->old_parent =$cat->parent;
-        if($saveData){$newBrand->save();}
-
-        $newTranslation = new BrandTranslation();
-        $newTranslation->brand_id = $newBrand->id ;
-        $newTranslation->locale = "ar" ;
-        $newTranslation->slug = urldecode($cat->term->slug);
-        $newTranslation->name = $cat->term->name ;
-        $newTranslation->des  = $cat->description ;
-        if($saveData){$newTranslation->save() ;}
-
-        foreach ($cat->meta as $metas){
-             echobr($metas->meta_key." ".$metas->meta_value);
-
-            if( $metas->meta_key == 'thumbnail_id'){
-                $post = Post::find($metas->meta_value);
-                if(isset($post->guid)){
-                    $newBrand->photo_thum_1 = self::UpdatePhotoPath($post->guid);
-                    if($saveData){$newBrand->save();}
-                }
-            }
-
-            if( $metas->meta_key == 'banner_id' ){
-                $post = Post::find($metas->meta_value);
-                if(isset($post->guid)){
-                    $newBrand->photo = self::UpdatePhotoPath($post->guid);
-                    if($saveData){$newBrand->save();}
-                }
-            }
-
-            if( $metas->meta_key == 'rank_math_description'){
-                $newTranslation->g_des  =  $metas->meta_value ;
-                if($saveData){$newTranslation->save() ;}
-            }
-
-            if( $metas->meta_key == 'rank_math_title'){
-                $g_title = str_replace(['%term%','%title%','|'],['','',''],$metas->meta_value);
-                $newTranslation->g_title  = trim($g_title) ;
-                if($saveData){$newTranslation->save() ;}
-            }
-
-        }
-    }
-
-
-    $getAllBrand = Brand::where('photo','=',null)->where('photo_thum_1','!=',null)->get();
-    foreach ($getAllBrand as $Update){
-        $Update->photo = $Update->photo_thum_1 ;
-        $Update->save() ;
-    }
-
-
 
 }
+
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#|||||||||||||||||||||||||||||||||||||| #ImportCat
+    public function indexImportCat(){
+        $cats = Taxonomy::where('taxonomy', 'product_cat')->with('meta')->take(500000)->get();
+        $saveData = 0;
+
+
+        foreach ($cats as $cat){
+            $newBrand = new Category();
+
+
+            $newBrand->old_id = $cat->term_id;
+            $newBrand->product_count = $cat->count;
+            $newBrand->old_parent =$cat->parent;
+            if($saveData){$newBrand->save();}
+
+
+            $newTranslation = new CategoryTranslation();
+            $newTranslation->category_id = $newBrand->id ;
+            $newTranslation->locale = "ar" ;
+            $newTranslation->slug = urldecode($cat->term->slug);
+            $newTranslation->name = $cat->term->name ;
+            $newTranslation->des  = $cat->description ;
+            $newTranslation->g_title  = $cat->term->name ;
+            $newTranslation->g_des  =  AdminHelper::seoDesClean($cat->description) ;
+            if($saveData){$newTranslation->save() ;}
+
+            foreach ($cat->meta as $metas){
+                if($metas->meta_key != 'below_category_content'){
+                    echobr($metas->meta_key." ".$metas->meta_value);
+                }else{
+                    echobr($metas->meta_key);
+                }
+
+                if( $metas->meta_key == 'below_category_content'){
+                    $newTranslation->des  =  $metas->meta_value ;
+                    $newTranslation->g_des  =  AdminHelper::seoDesClean($metas->meta_value) ;
+                    if($saveData){$newTranslation->save() ;}
+                }
+
+                if( $metas->meta_key == 'product_count_product_cat'){
+                    $newBrand->product_count = $cat->count;
+                    if($saveData){$newBrand->save();}
+                }
+
+
+                if( $metas->meta_key == 'thumbnail_id'){
+                    $post = Post::find($metas->meta_value);
+                    if(isset($post->guid)){
+                        $newBrand->photo = self::UpdatePhotoPath($post->guid);
+                        $newBrand->photo_thum_1 = self::UpdatePhotoPath($post->guid);
+                        if($saveData){$newBrand->save();}
+                    }
+                }
+
+            }
+            echobr('###############################$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+        }
+
+    }
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#|||||||||||||||||||||||||||||||||||||| #ImportBrands
+    public function indexImportBrands(){
+//    $cat = Taxonomy::where('taxonomy', 'yith_product_brand')->with('posts')->take(1)->get();
+        $cats = Taxonomy::where('taxonomy', 'yith_product_brand')->with('meta')->take(1)->get();
+        $saveData = 0 ;
+
+
+        foreach ($cats as $cat){
+            $newBrand = new Brand();
+            $newBrand->old_id = $cat->term_id;
+            $newBrand->product_count = $cat->count;
+            $newBrand->old_parent =$cat->parent;
+            if($saveData){$newBrand->save();}
+
+            $newTranslation = new BrandTranslation();
+            $newTranslation->brand_id = $newBrand->id ;
+            $newTranslation->locale = "ar" ;
+            $newTranslation->slug = urldecode($cat->term->slug);
+            $newTranslation->name = $cat->term->name ;
+            $newTranslation->des  = $cat->description ;
+            if($saveData){$newTranslation->save() ;}
+
+            foreach ($cat->meta as $metas){
+                echobr($metas->meta_key." ".$metas->meta_value);
+
+                if( $metas->meta_key == 'thumbnail_id'){
+                    $post = Post::find($metas->meta_value);
+                    if(isset($post->guid)){
+                        $newBrand->photo_thum_1 = self::UpdatePhotoPath($post->guid);
+                        if($saveData){$newBrand->save();}
+                    }
+                }
+
+                if( $metas->meta_key == 'banner_id' ){
+                    $post = Post::find($metas->meta_value);
+                    if(isset($post->guid)){
+                        $newBrand->photo = self::UpdatePhotoPath($post->guid);
+                        if($saveData){$newBrand->save();}
+                    }
+                }
+
+                if( $metas->meta_key == 'rank_math_description'){
+                    $newTranslation->g_des  =  $metas->meta_value ;
+                    if($saveData){$newTranslation->save() ;}
+                }
+
+                if( $metas->meta_key == 'rank_math_title'){
+                    $g_title = str_replace(['%term%','%title%','|'],['','',''],$metas->meta_value);
+                    $newTranslation->g_title  = trim($g_title) ;
+                    if($saveData){$newTranslation->save() ;}
+                }
+
+            }
+        }
+
+
+        $getAllBrand = Brand::where('photo','=',null)->where('photo_thum_1','!=',null)->get();
+        foreach ($getAllBrand as $Update){
+            $Update->photo = $Update->photo_thum_1 ;
+            $Update->save() ;
+        }
+
+
+
+    }
+
+
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #|||||||||||||||||||||||||||||||||||||| #   UpdatePhotoPath
     public function UpdatePhotoPath($url){
