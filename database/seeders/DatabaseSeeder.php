@@ -82,10 +82,10 @@ class DatabaseSeeder extends Seeder
 //        $this->call(SeederAppMenu::class);
 //        $this->call(SeederAppMenuTranslation::class);
 
-//        $this->call(CategorySeeder::class);
-//        $this->call(CategoryTranslationSeeder::class);
-//        $this->call(BrandSeeder::class);
-//        $this->call(BrandTranslationSeeder::class);
+        $this->call(CategorySeeder::class);
+        $this->call(CategoryTranslationSeeder::class);
+        $this->call(BrandSeeder::class);
+        $this->call(BrandTranslationSeeder::class);
 //        $this->call(ProductSeeder::class);
 //        $this->call(ProductTranslationSeeder::class);
 //        $this->call(ProductPhotoSeeder::class);
