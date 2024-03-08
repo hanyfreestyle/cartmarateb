@@ -15,16 +15,39 @@ use Illuminate\Support\Carbon;
 class WordPressController extends Controller {
 
 
-//public function index(){
-////    $cat = Taxonomy::where('taxonomy', 'yith_product_brand')->with('posts')->take(1)->get();
-//    $cats = Taxonomy::where('taxonomy', 'yith_product_brand')->take(1)->get();
-//    foreach ($cats as $cat){
+public function index(){
+//    $cat = Taxonomy::where('taxonomy', 'yith_product_brand')->with('posts')->take(1)->get();
+    $cats = Taxonomy::where('taxonomy', 'yith_product_brand')->with('meta')->take(555555555555555)->get();
+
+
+    foreach ($cats as $cat){
+
+        echobr($cat->term->name);
+//        $oldId = $cat->term_id;
+//        $description = $cat->description;
+//        $parent = $cat->parent;
+//        $count = $cat->count;
+//        $name = $cat->term->name;
+//        $slug = urldecode($cat->term->slug);
 //
-//        dd($cat);
-//        $cat->thumbnail;
-//    }
+//
+//        foreach ($cat->meta as $metas){
+//
+//            echobr($metas->meta_key." ".$metas->meta_value);
+//            if( $metas->meta_key == 'thumbnail_id'){
+//                $post = Post::find($metas->meta_value);
+//                dd($post->guid);
+//            }
+//
+//
+//
+//        }
+
+
+
+    }
 //    dd($cats);
-//}
+}
 
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
