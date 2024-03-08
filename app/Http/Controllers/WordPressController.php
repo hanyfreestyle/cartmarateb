@@ -21,7 +21,7 @@ class WordPressController extends Controller {
 
 
 
-    
+
 public function index(){
 
 }
