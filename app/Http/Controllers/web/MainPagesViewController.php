@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\web;
 
+use App\AppPlugin\BlogPost\Models\Blog;
 use App\AppPlugin\Leads\ContactUs\ContactUsForm;
 use App\AppPlugin\Leads\ContactUs\ContactUsFormRequest;
 use App\AppPlugin\Leads\ContactUs\ContactUsOnPageRequest;
+use App\AppPlugin\Product\Models\Brand;
 use App\Http\Controllers\WebMainController;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -23,12 +25,39 @@ class MainPagesViewController extends WebMainController{
 
         $pageView = $this->pageView ;
         $pageView['SelMenu'] = 'HomePage' ;
+//        $blogs =Blog::where('is_active',true)->get();
+        $brands = Brand::where('is_active',true)->get();
 
 
 
         return view('web.index')->with(
             [
                 'pageView'=>$pageView,
+//                'blogs'=>$blogs,
+                'brands'=>$brands,
+            ]
+        );
+    }
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#|||||||||||||||||||||||||||||||||||||| #     Blog
+    public function Blog(){
+
+        $Meta = parent::getMeatByCatId('home');
+        parent::printSeoMeta($Meta,'page_index');
+
+        $pageView = $this->pageView ;
+        $pageView['SelMenu'] = 'HomePage' ;
+        $blogs = Blog::where('is_active',true)->orderby('id',"desc")->paginate(20);
+
+
+
+
+        return view('web.blog')->with(
+            [
+                'pageView'=>$pageView,
+                'blogs'=>$blogs,
+
             ]
         );
     }

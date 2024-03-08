@@ -22,6 +22,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function(){
 Route::group(['middleware' => ['UnderConstruction','MinifyHtml']], function() {
     Route::group(['prefix' => LaravelLocalization::setLocale()], function(){
         Route::get('/', [MainPagesViewController::class, 'index'])->name('page_index');
+        Route::get('/blog', [MainPagesViewController::class, 'Blog'])->name('page_blog');
     });
 });
 
@@ -41,6 +42,7 @@ Route::group(['middleware' => ['UnderConstruction','MinifyHtml','localeSessionRe
         Route::get('/Meeting/request', [MainPagesViewController::class, 'RequestListingView'])->name('MeetingRequestPage');
         Route::get('/favorite-listing', [MainPagesViewController::class, 'FavoriteListing'])->name('FavoriteListing');
 
+        Route::get('/brands', [MainPagesViewController::class, 'brandsView'])->name('brandsView');
 
 
     });
