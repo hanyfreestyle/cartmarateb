@@ -10,12 +10,20 @@ return new class extends Migration {
         Schema::create('pro_products', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('old_id')->nullable();
+
             $table->integer('brand_id')->nullable()->default(null);
-            $table->text('cat_id')->nullable()->default(null);
+            $table->integer('old_brand_id')->nullable()->default(null);
+
+            $table->integer('cat_id')->nullable()->default(null);
+            $table->integer('old_cat_id')->nullable()->default(null);
+
+            $table->integer('children')->nullable()->default(null);
             $table->text('tag_id')->nullable()->default(null);
+
             $table->integer('sku')->nullable()->default(null);
 
             $table->float('price')->nullable()->default(null);
+            $table->float('regular_price')->nullable()->default(null);
             $table->float('sale_price')->nullable()->default(null);
             $table->integer('qty_left')->nullable()->default(null);
             $table->integer('qty_max')->nullable()->default(null);
