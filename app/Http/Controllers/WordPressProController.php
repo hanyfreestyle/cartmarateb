@@ -28,7 +28,7 @@ class WordPressProController extends Controller {
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #|||||||||||||||||||||||||||||||||||||| #
-    public function indexBrand(){
+    public function index(){
         $UpdateOldBarnd = Product::where('old_brand_id','!=',null)->get();
         if(count($UpdateOldBarnd) > 0){
             foreach ($UpdateOldBarnd as $oldBrand){
@@ -36,7 +36,7 @@ class WordPressProController extends Controller {
                 if($getNewId){
 //                    echobr($oldBrand->old_brand_id." ".$getNewId->id);
                     $oldBrand->old_brand_id = null;
-                    $oldBrand->cat_id = $getNewId->id;
+                    $oldBrand->brand_id = $getNewId->id;
                     $oldBrand->save();
                 }
             }
@@ -47,7 +47,7 @@ class WordPressProController extends Controller {
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #|||||||||||||||||||||||||||||||||||||| #
-    public function indexHany(){
+    public function indexCat(){
         $AllCats = Category::all();
         foreach ($AllCats as $cat){
             $thisId = $cat->id ;
@@ -60,7 +60,7 @@ class WordPressProController extends Controller {
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #|||||||||||||||||||||||||||||||||||||| #
-    public function indexYYYY(){
+    public function indexY(){
         $UpdateOldCat = Product::where('old_cat_id','!=',null)->get();
         if(count($UpdateOldCat) > 0){
             foreach ($UpdateOldCat as $oldCat){

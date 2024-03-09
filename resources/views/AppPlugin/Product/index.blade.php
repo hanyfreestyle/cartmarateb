@@ -15,11 +15,15 @@
             @include('AppPlugin.Product.index_header')
             <tbody>
             @foreach($rowData as $row)
+
               <tr>
                 <td>{{$row->id}}</td>
+                <td>{{$row->old_id}}</td>
                 <td class="tc">{!! TablePhoto($row,'photo_thum_1') !!} </td>
                 @foreach(config('app.web_lang') as $key => $lang)
+                    @if($key=='ar')
                   <td>{!! printCategoryName($key,$row,$PrefixRoute.".SubCategory") !!}</td>
+                      @endif
                 @endforeach
                 @if($pageData['ViewType'] == 'deleteList')
                   <x-admin.table.soft-delete type="b" :row="$row" />
@@ -31,9 +35,10 @@
                       </a>
                     @endforeach
                   </td>
+                  <td>{{$row->brand->name ?? ''}}</td>
                   <td>{{$row->price}}</td>
                   <td>{{$row->sale_price}}</td>
-                  <td>{{$row->qty_left}}</td>
+{{--                  <td>{{$row->qty_left}}</td>--}}
                   <td>{!! is_active($row->is_active) !!}</td>
                   <x-admin.table.action-but type="Photos" :row="$row" />
                   <x-admin.table.action-but type="addLang" :row="$row"/>

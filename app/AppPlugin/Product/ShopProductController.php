@@ -64,7 +64,8 @@ class ShopProductController extends AdminMainController {
         $pageData['ViewType'] = "List";
         $pageData['SubView'] = false;
         $pageData['Trashed'] = Product::onlyTrashed()->count();
-        $rowData = self::getSelectQuery(Product::def());
+        $rowData = self::getSelectQuery(Product::def()->with('brand'));
+
         return view('AppPlugin.Product.index', compact('pageData', 'rowData'));
     }
 
