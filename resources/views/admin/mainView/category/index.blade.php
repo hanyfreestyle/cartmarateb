@@ -37,6 +37,7 @@
             <thead>
             <tr>
               <th class="TD_20">#</th>
+              <th class="TD_20">#</th>
               <th class="TD_20"></th>
               @foreach(config('app.web_lang') as $key => $lang)
                 <th>{{DefCategoryTextName($DefCategoryTextName)}}  {{printLableKey($key)}}</th>
@@ -51,6 +52,7 @@
             @foreach($rowData as $row)
               <tr>
                 <td>{{$row->id}}</td>
+                <td>{{$row->old_id ?? ''}}</td>
                 <td class="tc">{!! TablePhoto($row,'photo_thum_1') !!} </td>
                 @foreach(config('app.web_lang') as $key => $lang)
                   <td>{!! printCategoryName($key,$row,$PrefixRoute.".SubCategory") !!}</td>

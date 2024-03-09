@@ -10,7 +10,11 @@ use App\AppPlugin\Product\Models\Brand;
 use App\AppPlugin\Product\Models\BrandTranslation;
 use App\AppPlugin\Product\Models\Category;
 use App\AppPlugin\Product\Models\CategoryTranslation;
+use App\AppPlugin\Product\Models\Product;
+use App\AppPlugin\Product\Models\ProductPhotoThumbnail;
+use App\AppPlugin\Product\Models\ProductTranslation;
 use App\Helpers\AdminHelper;
+use Corcel\Model\Meta\ThumbnailMeta;
 use Corcel\Model\Taxonomy;
 use Illuminate\Http\Request;
 use Corcel\Model\Post;
@@ -19,13 +23,178 @@ use Illuminate\Support\Carbon;
 class WordPressController extends Controller {
 
 
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#|||||||||||||||||||||||||||||||||||||| #
+    public function index(){
+        $SaveData = 0 ;
+
+        if($SaveData){
+            $posts = Post::published()->where('post_type', 'product')->with('attachment')
+                ->take(5555555555555555555)->get();
+
+        }else{
+            $posts = Post::published()->where('post_type', 'product')->with('attachment')->take(2)->get();
+        }
+
+        foreach ($posts as $post) {
+            echobr($post->ID);
+            if(isset($post->thumbnail->attachment->guid)){
+                $photo = self::UpdatePhotoPath($post->thumbnail->attachment->guid);
+            }else{
+                $photo = null;
+            }
+
+            $newProduct = new Product();
+            $newProduct->old_id = $post->ID;
+            $newProduct->created_at  = $post->post_date;
+            $newProduct->updated_at   = $post->post_modified;
+            $newProduct->photo   = $photo;
+
+            if ($SaveData){
+                $newProduct->save();
+            }
+            if(isset($post->thumbnail->attachment->guid)){
+                $allsize = $post->thumbnail->allsize();
+
+                if($allsize != null){
+                    foreach ($allsize as $key => $value){
+                        $thisDir = dirname($post->thumbnail->attachment->guid .'/'.$value['file']);
+                        $saveThumbnail = new ProductPhotoThumbnail();
+                        $saveThumbnail->product_id = $newProduct->id;
+                        $saveThumbnail->key = $key;
+                        $saveThumbnail->file = $value['file'];
+                        $saveThumbnail->width = $value['width'];
+                        $saveThumbnail->height = $value['height'];
+                        $saveThumbnail->url = self::UpdatePhotoPath($thisDir);
+                        if ($SaveData){
+                            $saveThumbnail->save();
+                        }
+                    }
+                }
+            }
+
+
+//            dd('stop');
+//            $newTranslation = new ProductTranslation();
+//            $newTranslation->product_id = $newProduct->id ;
+//            $newTranslation->locale = "ar" ;
+//            $newTranslation->slug =  urldecode($post->post_name); ;
+//            $newTranslation->name = $post->post_title ;
+//            $newTranslation->des  = $post->post_content ;
+//            if ($SaveData){
+//                $newTranslation->save() ;
+//            }
 
 
 
-public function index(){
+        }
 
-}
 
+    }
+
+
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#|||||||||||||||||||||||||||||||||||||| #   ImportPosts
+    public function indexssssssssssssssss() {
+
+        //$posts = Post::published()->where('post_type', 'post')->get();
+
+
+        $SaveData = 0 ;
+
+        if($SaveData){
+            $posts = Post::published()->where('post_type', 'post')->get();
+        }else{
+            $posts = Post::published()->where('post_type', 'product')->take(2)->get();
+        }
+
+        $cats = Taxonomy::where('taxonomy', 'pa_الماركة')->with('meta')->take(1)->get();
+        $posts = Post::published()->where('ID', 47745)->with('taxonomies')->take(2)->get();
+        $posts = Post::published()->where('ID', 47745)->with('taxonomies')->with('comments')->with('attachment')->first();
+
+        dd(Post::published()->where('post_type', 'product')->count());
+
+
+//        const SIZE_THUMBNAIL = 'thumbnail';
+//        const SIZE_MEDIUM = 'medium';
+//        const SIZE_LARGE = 'large';
+//        const SIZE_FULL = 'full';
+       dd( $posts->thumbnail->size(ThumbnailMeta::SIZE_THUMBNAIL));
+        dd($posts->getTermsAttribute());
+       foreach ($posts->taxonomies as $tt){
+           echobr($tt->term_id . " ".$tt->taxonomy);
+       }
+
+       dd('stop');
+
+        foreach ($posts as $post) {
+            echobr($post->ID);
+            echobr('##############################################');
+
+//            $newPost = new Blog();
+//            $newPost->old_id = $post->ID;
+//            $newPost->created_at  = $post->post_date;
+//            $newPost->updated_at   = $post->post_modified;
+//            $newPost->published_at   = Carbon::parse($post->post_date)->format("Y-m-d");
+//            if($post->thumbnail != null){
+//                $thumbnail = str_replace('https://cottton.shop/','',$post->thumbnail);
+//                $newPost->photo  = $thumbnail;
+//                $newPost->photo_thum_1  = $thumbnail;
+//            }
+//
+//            if ($SaveData){
+//                $newPost->save();
+//            }
+//
+//
+//            $newTranslation = new BlogTranslation();
+//            $newTranslation->blog_id = $newPost->id ;
+//            $newTranslation->locale = "ar" ;
+//            $newTranslation->slug =  urldecode($post->post_name); ;
+//            $newTranslation->name = $post->post_title ;
+//            $newTranslation->des  = $post->post_content ;
+//            if ($SaveData){
+//                $newTranslation->save() ;
+//            }
+
+
+            foreach ($post->meta as $meta) {
+                $Line = $meta->meta_key . " > " . $meta->meta_value;
+
+//                if ($SaveData){
+//                    if ($meta->meta_key == '_yoast_wpseo_primary_category' ) {
+//                        $newPost->old_cat = $meta->meta_value;
+//                        $newPost->save();
+//                    }
+//
+//                    if ($meta->meta_key == 'rank_math_primary_category' ) {
+//                        $newPost->old_cat = $meta->meta_value;
+//                        $newPost->save();
+//                    }
+//
+//
+//                    if ($meta->meta_key == '_yoast_post_redirect_info' ) {
+//                        $newPost->redirect_info = $meta->meta_value;
+//                        $newPost->save();
+//                    }
+//
+//
+//                    if ($meta->meta_key == '_yoast_wpseo_title') {
+//                        self::UpdateMeta($newPost->id,'g_title',$meta->meta_value);
+//                    }
+//
+//                    if ($meta->meta_key == '_yoast_wpseo_metadesc') {
+//                        self::UpdateMeta($newPost->id,'g_des',$meta->meta_value);
+//                    }
+//
+//                }
+
+                echobr($Line);
+            }
+            echobr("----------------------------");
+        }
+    }
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #|||||||||||||||||||||||||||||||||||||| #ImportCat
@@ -159,7 +328,7 @@ public function index(){
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #|||||||||||||||||||||||||||||||||||||| #   UpdatePhotoPath
     public function UpdatePhotoPath($url){
-        $thumbnail = str_replace('https://cottton.shop/','',$url);
+        $thumbnail = str_replace(['https://cottton.shop/','http://cottton.shop/'],['',''],$url);
         return $thumbnail;
     }
 
@@ -226,7 +395,7 @@ public function index(){
         //$posts = Post::published()->where('post_type', 'post')->get();
 
 
-        $SaveData = 1 ;
+        $SaveData = 0 ;
 
         if($SaveData){
             $posts = Post::published()->where('post_type', 'post')->get();
@@ -321,18 +490,6 @@ public function UpdateMeta($saveData,$row,$val){
     #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #|||||||||||||||||||||||||||||||||||||| #
     public function indexSSSS() {
-//        $cat = Taxonomy::category()->get();
-//        dd($cat);
-//        echo "<pre>"; print_r($cat->name); echo "</pre>";
-
-//        $cat = Taxonomy::where('taxonomy', 'product_cat')->with('posts')->get();
-//        dd($cat);
-
-//        $cat->each(function($category) {
-//            echo $category->name;
-//        });
-//        dd('ddd');
-
 
         $posts = Post::published()->where('post_type', 'post')->take(25)->get();
 

@@ -9,7 +9,10 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('pro_products', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('old_id')->nullable();
             $table->integer('brand_id')->nullable()->default(null);
+            $table->text('cat_id')->nullable()->default(null);
+            $table->text('tag_id')->nullable()->default(null);
             $table->integer('sku')->nullable()->default(null);
 
             $table->float('price')->nullable()->default(null);
@@ -20,7 +23,10 @@ return new class extends Migration {
 
             $table->string("photo")->nullable();
             $table->string("photo_thum_1")->nullable();
+            $table->string("photo_thum_2")->nullable();
+            $table->string("photo_thum_3")->nullable();
 
+            $table->boolean("on_stock")->default(true);
             $table->boolean("is_active")->default(true);
             $table->boolean("is_archived")->default(false);
             $table->timestamps();
