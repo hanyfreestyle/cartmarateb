@@ -8,6 +8,7 @@ use App\AppPlugin\Product\Models\Product;
 use App\AppPlugin\Product\Models\ProductPhotoThumbnail;
 use App\AppPlugin\Product\Models\ProductTranslation;
 use Corcel\Model\Post;
+use Corcel\Model\Taxonomy;
 
 
 class WordPressProController extends Controller {
@@ -25,6 +26,43 @@ class WordPressProController extends Controller {
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #|||||||||||||||||||||||||||||||||||||| #
     public function index(){
+
+//        $posts = Post::published()->where('post_type', 'product')
+//            ->where('ID',57896)->with('children')->with('taxonomies')->first();
+//
+//        dd($posts->taxonomies);
+//
+//        foreach ($posts->children as $children){
+//
+//            echobr($children->ID);
+//            foreach ($children->meta as $meta) {
+//                $Line = $meta->meta_key . " > " . $meta->meta_value;
+//                echobr($Line);
+//            }
+//
+//            echobr("###########################################################################");
+//        }
+//        dd($posts->children);
+
+        $xx = 'a:8:{i:0;O:8:"stdClass":6:{s:12:"attribute_id";s:2:"10";s:14:"attribute_name";s:4:"size";s:15:"attribute_label";s:12:"المقاس";s:14:"attribute_type";s:6:"select";s:17:"attribute_orderby";s:10:"menu_order";s:16:"attribute_public";s:1:"0";}i:1;O:8:"stdClass":6:{s:12:"attribute_id";s:2:"12";s:14:"attribute_name";s:27:"ارتفاع-المرتبة";s:15:"attribute_label";s:27:"ارتفاع المرتبة";s:14:"attribute_type";s:6:"select";s:17:"attribute_orderby";s:10:"menu_order";s:16:"attribute_public";s:1:"0";}i:2;O:8:"stdClass":6:{s:12:"attribute_id";s:2:"19";s:14:"attribute_name";s:14:"الماركة";s:15:"attribute_label";s:14:"الماركة";s:14:"attribute_type";s:6:"select";s:17:"attribute_orderby";s:10:"menu_order";s:16:"attribute_public";s:1:"0";}i:3;O:8:"stdClass":6:{s:12:"attribute_id";s:2:"18";s:14:"attribute_name";s:19:"طبقة-مميزة";s:15:"attribute_label";s:19:"طبقة مميزة";s:14:"attribute_type";s:6:"select";s:17:"attribute_orderby";s:10:"menu_order";s:16:"attribute_public";s:1:"0";}i:4;O:8:"stdClass":6:{s:12:"attribute_id";s:2:"14";s:14:"attribute_name";s:21:"طول-المرتبة";s:15:"attribute_label";s:21:"طول المرتبة";s:14:"attribute_type";s:6:"select";s:17:"attribute_orderby";s:10:"menu_order";s:16:"attribute_public";s:1:"0";}i:5;O:8:"stdClass":6:{s:12:"attribute_id";s:2:"13";s:14:"attribute_name";s:21:"عرض-المرتبة";s:15:"attribute_label";s:21:"عرض المرتبة";s:14:"attribute_type";s:6:"select";s:17:"attribute_orderby";s:10:"menu_order";s:16:"attribute_public";s:1:"0";}i:6;O:8:"stdClass":6:{s:12:"attribute_id";s:2:"17";s:14:"attribute_name";s:21:"نوع-الاسفنج";s:15:"attribute_label";s:21:"نوع الاسفنج";s:14:"attribute_type";s:6:"select";s:17:"attribute_orderby";s:10:"menu_order";s:16:"attribute_public";s:1:"0";}i:7;O:8:"stdClass":6:{s:12:"attribute_id";s:2:"15";s:14:"attribute_name";s:21:"نوع-المرتبة";s:15:"attribute_label";s:21:"نوع المرتبة";s:14:"attribute_type";s:6:"select";s:17:"attribute_orderby";s:10:"menu_order";s:16:"attribute_public";s:1:"0";}}';
+        dd(unserialize($xx));
+        $cats = Taxonomy::where('taxonomy', 'product_attributes')->with('meta')->take(1)->get();
+        $cats = Taxonomy::where('taxonomy', 'pa_size')->with('meta')->get();
+        $cats = Taxonomy::where('taxonomy', 'pa_طبقة-مميزة')->with('meta')->with('posts')->get();
+        $cats = Taxonomy::where('taxonomy', 'pa_size')->with('meta')->with('posts')->get();
+
+
+        $cats = Taxonomy::where('taxonomy', '_transient_wc_attribute_taxonomies')->with('meta')->get();
+        dd($cats);
+
+//        foreach ($cats as $cat){
+//
+//            echobr($cat->term->name);
+//            echobr(count($cat->posts));
+//            echobr("-----------------------------------");
+//        }
+//        dd($cats);
+
 //        $rowData =  Product::def()->where('cat_id',null)->take(1)->get();
 //        foreach ($rowData as $pro){
 //            echobr($pro->old_id);
@@ -64,7 +102,9 @@ class WordPressProController extends Controller {
             $row->save();
         }
 
-        $proId = ['40190','40198','40183','43169','43875','43916','44038','44707','44743','44744','44745','44746','45048','45055','45056','45236','45242','50065','50079','50092','50105','50118','50131','50144','50157','50170','50183','57703','57759','','','','','',];
+        $proId = ['40190','40198','40183','43169','43875','43916','44038','44707','44743','44744','44745'
+            ,'44746','45048','45055','45056','45236','45242','50065','50079','50092','50105','50118','50131','50144',
+            '50157','50170','50183','57703','57759','','','','','',];
         $rowData =  Product::def()->whereIn('old_id',$proId)->get();
         foreach ($rowData as $row){
             $row->categories()->sync([1]);
