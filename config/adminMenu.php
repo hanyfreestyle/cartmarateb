@@ -41,7 +41,14 @@ return [
                     'icon' => 'fas fa-copyright',
                     'view' => true
                 ],
-
+                [
+                    'sel_routs' => 'ProAttribute',
+                    'url' => 'Shop.ProAttribute.index',
+                    'roleView' => 'Product_view',
+                    'text' => 'admin/proProduct.app_menu_attribute',
+                    'icon' => 'fas fa-puzzle-piece',
+                    'view' => true
+                ],
                 [
                     'sel_routs' => 'Product',
                     'url' => 'Shop.Product.index',
@@ -50,6 +57,7 @@ return [
                     'icon' => 'fas fa-shopping-cart',
                     'view' => true
                 ],
+
 
             ],
         ], #Product
