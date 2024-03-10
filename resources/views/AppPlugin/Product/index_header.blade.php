@@ -16,8 +16,6 @@
     <th class="TD_80">{{__('admin/proProduct.app_menu_brand')}}</th>
     <th class="TD_80">{{__('admin/proProduct.pro_text_price')}}</th>
     <th class="TD_80">{{__('admin/proProduct.pro_text_discount')}}</th>
-    <th class="TD_80">{{__('admin/proProduct.pro_text_discount')}}</th>
-
 
     <th class="TD_20"></th>
     <x-admin.table.action-but po="top" type="edit"/>

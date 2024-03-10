@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\AppPlugin\BlogPost\Models\Blog;
-use App\AppPlugin\BlogPost\Models\BlogCategory;
-use App\AppPlugin\BlogPost\Models\BlogTranslation;
 use App\AppPlugin\Product\Models\Brand;
 use App\AppPlugin\Product\Models\Category;
 use App\AppPlugin\Product\Models\Product;
@@ -25,16 +22,85 @@ class WordPressProController extends Controller {
     }
 
 
-
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #|||||||||||||||||||||||||||||||||||||| #
     public function index(){
+//        $rowData =  Product::def()->where('cat_id',null)->take(1)->get();
+//        foreach ($rowData as $pro){
+//            echobr($pro->old_id);
+//            $post = Post::where('ID',$pro->old_id)->first();
+//            foreach ($post->meta as $meta){
+//                $Line = $meta->meta_key . " > " . $meta->meta_value;
+//                echobr($Line);
+//            }
+//            dd($post);
+//
+//        }
+
+
+
+        //$saveData->categories()->sync($categories);
+
+    }
+
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#|||||||||||||||||||||||||||||||||||||| #  UpdateNoCat
+
+    function UpdateNoCat(){
+        $proId = ['37205','38225','38978','38990','42336'];
+        $rowData =  Product::def()->whereIn('old_id',$proId)->get();
+        foreach ($rowData as $row){
+            $row->categories()->sync([8]);
+            $row->cat_id = 8;
+            $row->save();
+        }
+
+        $proId = ['40058','40214','40206','','','','','',];
+        $rowData =  Product::def()->whereIn('old_id',$proId)->get();
+        foreach ($rowData as $row){
+            $row->categories()->sync([7]);
+            $row->cat_id = 7;
+            $row->save();
+        }
+
+        $proId = ['40190','40198','40183','43169','43875','43916','44038','44707','44743','44744','44745','44746','45048','45055','45056','45236','45242','50065','50079','50092','50105','50118','50131','50144','50157','50170','50183','57703','57759','','','','','',];
+        $rowData =  Product::def()->whereIn('old_id',$proId)->get();
+        foreach ($rowData as $row){
+            $row->categories()->sync([1]);
+            $row->cat_id = 1;
+            $row->save();
+        }
+
+        $proId = ['42992','42748','43214','','','','','',];
+        $rowData =  Product::def()->whereIn('old_id',$proId)->get();
+        foreach ($rowData as $row){
+            $row->categories()->sync([9]);
+            $row->cat_id = 9;
+            $row->save();
+        }
+
+
+        $proId = ['47745','','','','','',];
+        $rowData =  Product::def()->whereIn('old_id',$proId)->get();
+        foreach ($rowData as $row){
+            $row->categories()->sync([25]);
+            $row->cat_id = 25;
+            $row->save();
+        }
+
+        dd($rowData);
+    }
+
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#|||||||||||||||||||||||||||||||||||||| #
+    public function indexBrand(){
         $UpdateOldBarnd = Product::where('old_brand_id','!=',null)->get();
         if(count($UpdateOldBarnd) > 0){
             foreach ($UpdateOldBarnd as $oldBrand){
                 $getNewId = Brand::where('old_id',$oldBrand->old_brand_id)->first();
                 if($getNewId){
-//                    echobr($oldBrand->old_brand_id." ".$getNewId->id);
                     $oldBrand->old_brand_id = null;
                     $oldBrand->brand_id = $getNewId->id;
                     $oldBrand->save();

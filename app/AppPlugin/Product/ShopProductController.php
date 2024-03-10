@@ -65,6 +65,7 @@ class ShopProductController extends AdminMainController {
         $pageData['SubView'] = false;
         $pageData['Trashed'] = Product::onlyTrashed()->count();
         $rowData = self::getSelectQuery(Product::def()->with('brand'));
+        $rowData = self::getSelectQuery(Product::def()->where('brand_id',null));
 
         return view('AppPlugin.Product.index', compact('pageData', 'rowData'));
     }
@@ -98,6 +99,7 @@ class ShopProductController extends AdminMainController {
         $pageData = $this->pageData;
         $pageData['ViewType'] = "Add";
         $Categories = Category::all();
+
         $rowData = Product::findOrNew(0);
         $LangAdd = self::getAddLangForAdd();
         $selCat = [];
